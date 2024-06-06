@@ -1,0 +1,3 @@
+CREATE DATABASE "source";
+CREATE DATABASE "staging";
+CREATE DATABASE "star";
