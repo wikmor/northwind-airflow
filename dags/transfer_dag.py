@@ -88,6 +88,20 @@ def transfer_data():
         for row in source_data:
             star_hook.run(destination_sql, parameters=row)
 
+    source_sql = """
+                    SELECT customer_id, od.product_id, employee_id, od.order_id, supplier_id, od.unit_price, quantity
+                    FROM order_details od 
+                    JOIN orders o on od.order_id = o.order_id
+                    JOIN products p on od.product_id = p.product_id;
+                 """
+    source_data = source_hook.get_records(source_sql)
+
+    destination_sql = "INSERT INTO orders_facts (customer_id, product_id, employee_id, time_id, supplier_id, price, quantity) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    # SQL to insert data into destination database
+    if source_data:
+        for row in source_data:
+            star_hook.run(destination_sql, parameters=row)
+
 
 
 transfer_task = PythonOperator(

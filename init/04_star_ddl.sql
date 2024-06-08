@@ -41,13 +41,13 @@ CREATE TABLE employee (
 
 -- Orders Facts Table
 CREATE TABLE orders_facts (
-    customer_id bpchar,
-    product_id INT,
-    employee_id INT,
-    time_id INT,
-    supplier_id INT,
-    price DECIMAL(10, 2),
-    quantity INT,
+    customer_id bpchar NOT NULL,
+    product_id smallint NOT NULL,
+    employee_id smallint NOT NULL,
+    time_id smallint NOT NULL,
+    supplier_id smallint NOT NULL,
+    price real NOT NULL,
+    quantity smallint NOT NULL,
     PRIMARY KEY (customer_id, product_id, employee_id, time_id, supplier_id),
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
     FOREIGN KEY (product_id) REFERENCES product(product_id),
