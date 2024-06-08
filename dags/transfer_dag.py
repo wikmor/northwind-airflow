@@ -35,6 +35,22 @@ def transfer_data():
         for row in source_data:
             star_hook.run(destination_sql, parameters=row)
 
+    source_sql = """SELECT DISTINCT 
+        order_id AS time_id, 
+        order_date, 
+        date_part('year', order_date) AS year, 
+        date_part('quarter', order_date) AS quarter, 
+        date_part('month', order_date) AS month, 
+        date_part('day', order_date) AS day 
+    FROM orders;"""
+    source_data = source_hook.get_records(source_sql)
+
+    destination_sql = "INSERT INTO time (time_id, date, year, quarter, month, day) VALUES (%s, %s, %s, %s, %s, %s)"
+    # SQL to insert data into destination database
+    if source_data:
+        for row in source_data:
+            star_hook.run(destination_sql, parameters=row)
+
 
 transfer_task = PythonOperator(
     task_id='transfer_data',
