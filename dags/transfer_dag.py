@@ -23,7 +23,7 @@ dag = DAG(
 
 def transfer_data():
     source_hook = PostgresHook(postgres_conn_id='postgres_source')
-    star_hook = PostgresHook(postgres_conn_id='postgres_destination')
+    star_hook = PostgresHook(postgres_conn_id='postgres_star')
 
     # SQL to fetch data from source database
     source_sql = "SELECT customer_id, company_name, city, country FROM customers;"
