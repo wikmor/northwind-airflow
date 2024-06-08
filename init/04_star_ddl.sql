@@ -11,11 +11,11 @@ CREATE TABLE Time (
 );
 
 -- Customer Dimension Table
-CREATE TABLE Customer (
-    CustomerId INT PRIMARY KEY,
-    CompanyName VARCHAR(255),
-    City VARCHAR(255),
-    Country VARCHAR(255)
+CREATE TABLE customer (
+    customer_id bpchar NOT NULL PRIMARY KEY,
+    company_name character varying(40) NOT NULL,
+    city character varying(15),
+    country character varying(15)
 );
 
 -- Product Dimension Table
@@ -41,15 +41,15 @@ CREATE TABLE Employee (
 
 -- Orders Facts Table
 CREATE TABLE Orders_facts (
-    CustomerId INT,
+    customer_id bpchar,
     ProductId INT,
     EmployeeId INT,
     TimeId INT,
     SupplierId INT,
     Price DECIMAL(10, 2),
     Quantity INT,
-    PRIMARY KEY (CustomerId, ProductId, EmployeeId, TimeId, SupplierId),
-    FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId),
+    PRIMARY KEY (customer_id, ProductId, EmployeeId, TimeId, SupplierId),
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
     FOREIGN KEY (ProductId) REFERENCES Product(ProductId),
     FOREIGN KEY (EmployeeId) REFERENCES Employee(EmployeeId),
     FOREIGN KEY (TimeId) REFERENCES Time(TimeId),
