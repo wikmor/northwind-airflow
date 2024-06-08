@@ -26,6 +26,29 @@ def transfer_data():
     star_hook = PostgresHook(postgres_conn_id='postgres_star')
 
     # SQL to fetch data from source database
+    source_sql = """
+                    SELECT emp.employee_id, emp.last_name AS emp_last_name, mng.last_name AS mng_last_name
+                    FROM employees emp LEFT JOIN employees mng on emp.reports_to = mng.employee_id;
+                 """
+    source_data = source_hook.get_records(source_sql)
+
+    destination_sql = "INSERT INTO employee (employee_id, emp_last_name, mng_last_name) VALUES (%s, %s, %s)"
+    # SQL to insert data into destination database
+    if source_data:
+        for row in source_data:
+            star_hook.run(destination_sql, parameters=row)
+
+    # SQL to fetch data from source database
+    source_sql = "SELECT supplier_id, company_name, country FROM suppliers;"
+    source_data = source_hook.get_records(source_sql)
+
+    destination_sql = "INSERT INTO supplier (supplier_id, company_name, country) VALUES (%s, %s, %s)"
+    # SQL to insert data into destination database
+    if source_data:
+        for row in source_data:
+            star_hook.run(destination_sql, parameters=row)
+
+    # SQL to fetch data from source database
     source_sql = "SELECT customer_id, company_name, city, country FROM customers;"
     source_data = source_hook.get_records(source_sql)
 
@@ -50,6 +73,21 @@ def transfer_data():
     if source_data:
         for row in source_data:
             star_hook.run(destination_sql, parameters=row)
+
+
+    source_sql = """
+                    SELECT product_id, product_name, category_name
+                    FROM products 
+                    JOIN categories c ON c.category_id = products.category_id;
+                 """
+    source_data = source_hook.get_records(source_sql)
+
+    destination_sql = "INSERT INTO product (product_id, product_name, product_category) VALUES (%s, %s, %s)"
+    # SQL to insert data into destination database
+    if source_data:
+        for row in source_data:
+            star_hook.run(destination_sql, parameters=row)
+
 
 
 transfer_task = PythonOperator(

@@ -20,23 +20,23 @@ CREATE TABLE customer (
 
 -- Product Dimension Table
 CREATE TABLE product (
-    product_id INT PRIMARY KEY,
-    product_name VARCHAR(255),
-    product_category VARCHAR(255)
+    product_id smallint NOT NULL PRIMARY KEY,
+    product_name character varying(40) NOT NULL,
+    product_category character varying(15) NOT NULL
 );
 
 -- Supplier Dimension Table
 CREATE TABLE supplier (
-    supplier_id INT PRIMARY KEY,
-    company_name VARCHAR(255),
-    Country VARCHAR(255)
+    supplier_id smallint NOT NULL PRIMARY KEY,
+    company_name character varying(40) NOT NULL,
+    country character varying(15)
 );
 
 -- Employee Dimension Table
 CREATE TABLE employee (
-    employee_id INT PRIMARY KEY,
-    emp_last_name VARCHAR(255),
-    mng_last_name VARCHAR(255)
+    employee_id smallint NOT NULL PRIMARY KEY,
+    emp_last_name character varying(20) NOT NULL,
+    mng_last_name character varying(20)
 );
 
 -- Orders Facts Table
