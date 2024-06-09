@@ -138,3 +138,5 @@ order_task = PythonOperator(
     python_callable=to_order_facts,
     dag=dag
 )
+
+[customer_task, supplier_task, time_task, product_task, employee_task] >> order_task
