@@ -1170,6 +1170,11 @@ INSERT INTO public.suppliers VALUES
 	(28, 'Gai pâturage', 'Eliane Noz', 'Sales Representative', 'Bat. B 3, rue des Alpes', 'Annecy', NULL, '74000', 'France', '38.76.98.06', '38.76.98.58', NULL),
 	(29, 'Forêts d''érables', 'Chantal Goulet', 'Accounting Manager', '148 rue Chasseur', 'Ste-Hyacinthe', 'Québec', 'J2S 7S8', 'Canada', '(514) 555-2955', '(514) 555-2921', NULL);
 
+SELECT setval(
+    (SELECT pg_get_serial_sequence('suppliers', 'supplier_id')),
+    (SELECT MAX(supplier_id) FROM public.suppliers) + 1,
+    false
+);
 
 --
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: -
