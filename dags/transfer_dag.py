@@ -41,7 +41,7 @@ def to_time_dimension():
     source_sql = """
     SELECT DISTINCT 
     order_id AS time_id, 
-    order_date, 
+    order_date AS date, 
     date_part('year', order_date) AS year, 
     date_part('quarter', order_date) AS quarter, date_part('month', order_date) AS month, 
     date_part('day', order_date) AS day 
@@ -55,7 +55,7 @@ def to_time_dimension():
 
 def to_product_dimension():
     source_sql = """
-    SELECT product_id, product_name, category_name 
+    SELECT product_id, product_name, category_name AS product_category
     FROM products 
     JOIN categories c ON c.category_id = products.category_id;
     """
@@ -79,7 +79,7 @@ def to_employee_dimension():
 
 def to_order_facts():
     source_sql = """
-    SELECT customer_id, od.product_id, employee_id, od.order_id, supplier_id, od.unit_price, quantity 
+    SELECT customer_id, od.product_id, employee_id, od.order_id AS time_id, supplier_id, od.unit_price, quantity 
     FROM order_details od 
     JOIN orders o ON od.order_id = o.order_id 
     JOIN products p ON od.product_id = p.product_id;
