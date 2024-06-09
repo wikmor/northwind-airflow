@@ -29,14 +29,17 @@ dag = DAG(
 data = [
     (fake.company(), None, None, None, None, None, None, None, None, None, None),
     (fake.company(), None, None, None, None, None, None, fake.country(), None, None, None),
+    (fake.company(), None, None, None, None, None, None, fake.country(), None, None, None),
 ]
+
+values_sql = ', '.join(['(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'] * len(data))
 
 insert_rows = PostgresOperator(
     task_id="insert_rows",
     postgres_conn_id="postgres_source",
     sql=f"""
     INSERT INTO suppliers (company_name, contact_name, contact_title, address, city, region, postal_code, country, phone, fax, homepage) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s), (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    VALUES {values_sql}
     """,
     parameters=[item for sublist in data for item in sublist],
     dag=dag
