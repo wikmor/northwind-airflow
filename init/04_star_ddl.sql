@@ -28,8 +28,8 @@ CREATE TABLE product (
 -- Supplier Dimension Table
 CREATE TABLE supplier (
     supplier_id smallint NOT NULL PRIMARY KEY,
-    company_name character varying(40) NOT NULL,
-    country character varying(15)
+    company_name character varying(255) NOT NULL,
+    country character varying(255)
 );
 
 -- Employee Dimension Table
