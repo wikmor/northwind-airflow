@@ -21,6 +21,10 @@ dag = DAG(
 )
 
 
+def remove_and_create_suppliers():
+    PostgresHook(postgres_conn_id='postgres_staging').run("TRUNCATE TABLE suppliers_tmp;")  # TODO Externalize PostgresHook
+
+
 def clean_suppliers():
     source_sql = "SELECT supplier_id, company_name, COALESCE(country, 'NoCountryProvided') FROM suppliers;"
 
@@ -39,8 +43,16 @@ def _transfer_records(source_sql, destination_sql):
             staging_hook.run(destination_sql, parameters=row)
 
 
+remove_suppliers_table = PythonOperator(
+    task_id='remove_and_create_suppliers_table',
+    python_callable=remove_and_create_suppliers,
+    dag=dag
+)
+
 supplier_task = PythonOperator(
     task_id='clean_suppliers',
     python_callable=clean_suppliers,
     dag=dag
 )
+
+remove_suppliers_table >> supplier_task
