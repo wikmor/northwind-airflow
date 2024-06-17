@@ -21,8 +21,8 @@ dag = DAG(
 )
 
 
-def remove_supplier_contents():
-    PostgresHook(postgres_conn_id='postgres_star').run("TRUNCATE TABLE orders_facts, supplier;")  # TODO Externalize PostgresHook
+def clear_tables():
+    PostgresHook(postgres_conn_id='postgres_star').run("TRUNCATE TABLE orders_facts, supplier, time;")  # TODO Externalize PostgresHook
 
 
 # def to_customer_dimension():
@@ -41,22 +41,22 @@ def to_supplier_dimension():
     _transfer_records(staging_sql, destination_sql)
 
 
-# def to_time_dimension():
-#     source_sql = """
-#     SELECT DISTINCT
-#     order_id AS time_id,
-#     order_date AS date,
-#     date_part('year', order_date) AS year,
-#     date_part('quarter', order_date) AS quarter, date_part('month', order_date) AS month,
-#     date_part('day', order_date) AS day
-#     FROM orders;
-#     """
-#
-#     destination_sql = "INSERT INTO time (time_id, date, year, quarter, month, day) VALUES (%s, %s, %s, %s, %s, %s)"
-#
-#     _transfer_records(source_sql, destination_sql)
-#
-#
+def to_time_dimension():
+    staging_sql = """
+    SELECT DISTINCT
+    order_id AS time_id,
+    order_date AS date,
+    date_part('year', order_date) AS year,
+    date_part('quarter', order_date) AS quarter, date_part('month', order_date) AS month,
+    date_part('day', order_date) AS day
+    FROM orders_tmp;
+    """
+
+    destination_sql = "INSERT INTO time (time_id, date, year, quarter, month, day) VALUES (%s, %s, %s, %s, %s, %s)"
+
+    _transfer_records(staging_sql, destination_sql)
+
+
 # def to_product_dimension():
 #     source_sql = """
 #     SELECT product_id, product_name, category_name AS product_category
@@ -119,12 +119,12 @@ supplier_task = PythonOperator(
     dag=dag
 )
 
-# time_task = PythonOperator(
-#     task_id='to_time_dimension',
-#     python_callable=to_time_dimension,
-#     dag=dag
-# )
-#
+time_task = PythonOperator(
+    task_id='to_time_dimension',
+    python_callable=to_time_dimension,
+    dag=dag
+)
+
 # product_task = PythonOperator(
 #     task_id='to_product_dimension',
 #     python_callable=to_product_dimension,
@@ -145,10 +145,10 @@ supplier_task = PythonOperator(
 #
 # [customer_task, supplier_task, time_task, product_task, employee_task] >> order_task
 
-remove_supplier_contents_task = PythonOperator(
+clear_tables_task = PythonOperator(
     task_id='remove_supplier_contents',
-    python_callable=remove_supplier_contents,
+    python_callable=clear_tables,
     dag=dag
 )
 
-remove_supplier_contents_task >> supplier_task
+clear_tables_task >> [supplier_task, time_task]
