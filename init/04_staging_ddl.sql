@@ -6,11 +6,6 @@ CREATE TABLE suppliers_tmp (
     country      character varying(255)
 );
 
-CREATE TABLE orders_tmp (
-    order_id smallint NOT NULL PRIMARY KEY,
-    order_date date NOT NULL
-);
-
 CREATE TABLE employees_tmp (
     employee_id smallint NOT NULL PRIMARY KEY,
     last_name character varying(20) NOT NULL,
@@ -24,6 +19,15 @@ CREATE TABLE customers_tmp (
     company_name character varying(40) NOT NULL,
     city character varying(15),
     country character varying(15)
+);
+
+CREATE TABLE orders_tmp (
+    order_id smallint NOT NULL PRIMARY KEY,
+    customer_id bpchar,
+    employee_id smallint,
+    order_date date NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers_tmp,
+    FOREIGN KEY (employee_id) REFERENCES employees_tmp
 );
 
 CREATE TABLE categories_tmp (
