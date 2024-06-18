@@ -26,6 +26,11 @@ CREATE TABLE customers_tmp (
     country character varying(15)
 );
 
+CREATE TABLE categories_tmp (
+    category_id smallint NOT NULL PRIMARY KEY,
+    category_name character varying(15) NOT NULL
+);
+
 CREATE TABLE products_tmp (
     product_id smallint NOT NULL PRIMARY KEY,
     product_name character varying(40) NOT NULL,
@@ -33,11 +38,6 @@ CREATE TABLE products_tmp (
     category_id smallint,
 	FOREIGN KEY (category_id) REFERENCES categories_tmp,
 	FOREIGN KEY (supplier_id) REFERENCES suppliers_tmp
-);
-
-CREATE TABLE categories_tmp (
-    category_id smallint NOT NULL PRIMARY KEY,
-    category_name character varying(15) NOT NULL
 );
 
 CREATE TABLE order_details_tmp (
