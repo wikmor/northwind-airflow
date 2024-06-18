@@ -25,51 +25,6 @@ dag = DAG(
     catchup=False
 )
 
-
-class Transform:
-    def __init__(
-            self,
-            entity: str,
-            fetch_sql: str,
-            clean_func,
-            insert_sql: str
-    ) -> None:
-        self.entity = entity
-        self.fetch_sql = fetch_sql
-        self.clean_func = clean_func
-        self.insert_sql = insert_sql
-
-    def transfer_data(self):
-        data = self.fetch_data()
-        cleaned_data = self.clean_data(data)
-        StagingUtil.query_multiple(self.insert_sql, cleaned_data)
-
-    def fetch_data(self):
-        return SourceUtil.get_records(self.fetch_sql)
-
-    def clean_data(self, data):
-        return self.clean_func(data)
-
-
-class Load:
-    def __init__(
-            self,
-            entity: str,
-            fetch_sql: str,
-            insert_sql: str
-    ) -> None:
-        self.entity = entity
-        self.fetch_sql = fetch_sql
-        self.insert_sql = insert_sql
-
-    def transfer_data(self):
-        data = self.fetch_data()
-        StarUtil.query_multiple(self.insert_sql, data)
-
-    def fetch_data(self):
-        return StagingUtil.get_records(self.fetch_sql)
-
-
 def truncate_tables():
     StagingUtil.query("""
     TRUNCATE TABLE order_details_tmp, products_tmp, categories_tmp, customers_tmp, employees_tmp, suppliers_tmp, orders_tmp;

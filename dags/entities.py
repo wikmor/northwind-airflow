@@ -1,54 +1,10 @@
-from faker import Faker
+from transform_data import Transform
+from load_data import Load
+
 from collections.abc import Callable
+from faker import Faker
 
-from utils.postgres_util import StagingUtil, SourceUtil, StarUtil
-
-# from transfer import Transform, Load
 fake = Faker()
-
-
-class Transform:
-    def __init__(
-            self,
-            entity: str,
-            fetch_sql: str,
-            clean_func,
-            insert_sql: str
-    ) -> None:
-        self.entity = entity
-        self.fetch_sql = fetch_sql
-        self.clean_func = clean_func
-        self.insert_sql = insert_sql
-
-    def transfer_data(self):
-        data = self.fetch_data()
-        cleaned_data = self.clean_data(data)
-        StagingUtil.query_multiple(self.insert_sql, cleaned_data)
-
-    def fetch_data(self):
-        return SourceUtil.get_records(self.fetch_sql)
-
-    def clean_data(self, data):
-        return self.clean_func(data)
-
-
-class Load:
-    def __init__(
-            self,
-            entity: str,
-            fetch_sql: str,
-            insert_sql: str
-    ) -> None:
-        self.entity = entity
-        self.fetch_sql = fetch_sql
-        self.insert_sql = insert_sql
-
-    def transfer_data(self):
-        data = self.fetch_data()
-        StarUtil.query_multiple(self.insert_sql, data)
-
-    def fetch_data(self):
-        return StagingUtil.get_records(self.fetch_sql)
 
 
 def clean_suppliers(data):
@@ -185,5 +141,4 @@ entities_load = {
         VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
     ),
-
 }
