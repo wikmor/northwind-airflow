@@ -11,7 +11,7 @@ CREATE TABLE employees_tmp (
     last_name character varying(20) NOT NULL,
     first_name character varying(10) NOT NULL,
     reports_to smallint,
-	FOREIGN KEY (reports_to) REFERENCES employees_tmp
+    FOREIGN KEY (reports_to) REFERENCES employees_tmp
 );
 
 CREATE TABLE customers_tmp (
@@ -40,8 +40,8 @@ CREATE TABLE products_tmp (
     product_name character varying(40) NOT NULL,
     supplier_id smallint,
     category_id smallint,
-	FOREIGN KEY (category_id) REFERENCES categories_tmp,
-	FOREIGN KEY (supplier_id) REFERENCES suppliers_tmp
+    FOREIGN KEY (category_id) REFERENCES categories_tmp,
+    FOREIGN KEY (supplier_id) REFERENCES suppliers_tmp
 );
 
 CREATE TABLE order_details_tmp (
