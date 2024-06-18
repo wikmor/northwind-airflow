@@ -1,7 +1,7 @@
 from faker import Faker
 from collections.abc import Callable
 
-from utils.baseutil import StagingUtil, SourceUtil, StarUtil
+from utils.postgres_util import StagingUtil, SourceUtil, StarUtil
 
 # from transfer import Transform, Load
 fake = Faker()

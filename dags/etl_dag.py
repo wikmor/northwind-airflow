@@ -3,9 +3,7 @@ from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
 from faker import Faker
 
-from utils.baseutil import SourceUtil
-from utils.baseutil import StagingUtil
-from utils.baseutil import StarUtil
+from utils.postgres_util import SourceUtil, StagingUtil, StarUtil
 from entities import entities, entities_load
 
 fake = Faker()
