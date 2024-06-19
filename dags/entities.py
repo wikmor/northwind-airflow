@@ -1,7 +1,6 @@
 from transform_data import Transform
 from load_data import Load
 
-from collections.abc import Callable
 from faker import Faker
 
 fake = Faker()
