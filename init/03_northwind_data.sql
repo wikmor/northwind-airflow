@@ -1134,6 +1134,12 @@ INSERT INTO public.orders VALUES
 	(11076, 'BONAP', 4, '1998-05-06', '1998-06-03', NULL, 2, 38.28, 'Bon app''', '12, rue des Bouchers', 'Marseille', NULL, '13008', 'France'),
 	(11077, 'RATTC', 1, '1998-05-06', '1998-06-03', NULL, 2, 8.53, 'Rattlesnake Canyon Grocery', '2817 Milton Dr.', 'Albuquerque', 'NM', '87110', 'USA');
 
+SELECT setval(
+    (SELECT pg_get_serial_sequence('orders', 'order_id')),
+    (SELECT MAX(order_id) FROM public.orders) + 1,
+    false
+);
+
 
 --
 -- Data for Name: suppliers; Type: TABLE DATA; Schema: public; Owner: -
@@ -1170,6 +1176,11 @@ INSERT INTO public.suppliers VALUES
 	(28, 'Gai pâturage', 'Eliane Noz', 'Sales Representative', 'Bat. B 3, rue des Alpes', 'Annecy', NULL, '74000', 'France', '38.76.98.06', '38.76.98.58', NULL),
 	(29, 'Forêts d''érables', 'Chantal Goulet', 'Accounting Manager', '148 rue Chasseur', 'Ste-Hyacinthe', 'Québec', 'J2S 7S8', 'Canada', '(514) 555-2955', '(514) 555-2921', NULL);
 
+SELECT setval(
+    (SELECT pg_get_serial_sequence('suppliers', 'supplier_id')),
+    (SELECT MAX(supplier_id) FROM public.suppliers) + 1,
+    false
+);
 
 --
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: -
@@ -1254,6 +1265,11 @@ INSERT INTO public.products VALUES
 	(76, 'Lakkalikööri', 23, 1, '500 ml', 18, 57, 0, 20, 0),
 	(77, 'Original Frankfurter grüne Soße', 12, 2, '12 boxes', 13, 32, 0, 15, 0);
 
+SELECT setval(
+    (SELECT pg_get_serial_sequence('products', 'product_id')),
+    (SELECT MAX(product_id) FROM public.products) + 1,
+    false
+);
 
 --
 -- Data for Name: order_details; Type: TABLE DATA; Schema: public; Owner: -
